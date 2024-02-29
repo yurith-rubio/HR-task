@@ -1,0 +1,133 @@
+<script lang="ts">
+  import viteLogo from '/vite.svg'
+  import employees from './lib/employees.json'
+  import edit from './assets/edit.svg'
+  import close from './assets/x.svg'
+
+  let employeesData = employees;
+  let open = false;
+
+  type Current = {
+    photo: string,
+    employeeKey: string,
+    firstName: string,
+    lastName: string,
+    department: string,
+    active: boolean,
+    created: string,
+    comment?: string
+  }
+
+  let current: Current = {
+    photo: "",
+    employeeKey: "",
+    firstName: "",
+    lastName: "",
+    department: "",
+    active: false,
+    created: "",
+    comment: ""
+  }
+
+  function handleSelectRow(event: MouseEvent, employee: Current) {
+    document.documentElement.style.overflow = "hidden";
+    current = employee;
+    open = true;
+  }
+  function handleOpenModal() {
+    document.documentElement.style.overflow = "auto";
+    open = false;
+  }
+
+</script>
+
+<main>
+  <!-- <Modal isOpen={open} /> -->
+  <table id="TableContainer">
+    <thead>
+      <tr>
+        <th>Personalnummer</th>
+        <th>Foto</th>
+        <th>Name</th>
+        <th>Abteilung</th>
+        <th>Status</th>
+        <th>Erstellt</th>
+        <th>Kommentar</th>
+      </tr>
+    </thead>
+    <tbody>
+      {#each employeesData as employee}
+        <tr class="employee-row" on:click={(event) => handleSelectRow(event, employee)}>
+          <td class="key">{employee.employeeKey.toUpperCase()}</td>
+          <td><img class="avatar-img" src={`/src/assets/${employee.photo}`} alt={`${employee.firstName} ${employee.lastName} photo`} width="100" height="100" /></td>
+          <td>{employee.firstName} {employee.lastName} <span class="edit"><img class="edit-icon" src={edit} alt="edit icon"/></span></td>
+          <td class="tag"><span class="{employee.department.toLowerCase()}">{employee.department}</span></td>
+          <td class="tag"><span class={employee.active ? "aktiv" : "inaktiv"}>{employee.active ? "Aktiv" : "Inaktiv"}</span></td>
+          <td>{employee.created}</td>
+          {#if employee.comment}
+            <td class="comment">{employee.comment}</td>
+          {:else}
+            <td></td>
+          {/if}
+        </tr>
+      {/each}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>{employeesData.length} Einträge</td>
+      </tr>
+    </tfoot>
+  </table>
+  <div id="ModalContainer" class={open ? "visible" : "hide"}>
+      <button id="BgModal" class={open ? "visible" : "hide"} on:click={handleOpenModal}></button>
+      <div id="Modal" class={open ? "go-up" : ""}>
+        <div class="modal-close-heading"><button on:click={handleOpenModal} class="modal-close"><img src={close} alt="close icon"/></button></div>
+        <div class="modal-content flex">
+            <div class="modal-form flex">
+              <div class="modal-title dark">Aktuelle Daten</div>
+              <form>
+                <label>
+                  Personalnummer
+                  <input name="personalnummer" type="text"/>
+                </label>
+                <label>
+                  Vorname
+                  <input name="vorname" type="text"/>
+                </label>
+                <label>
+                  Nachname
+                  <input name="nachname" type="text"/>
+                </label>
+                <label>
+                  Abteilung
+                  <select name="abteilung">
+                    <option value="IT">IT</option>
+                    <option value="HR">HR</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Marketing">Marketing</option>
+                </label>
+                <label class="checkbox">
+                  <input type="checkbox" name="status" value="aktiv" checked={current.active ? true : false}/> {current.active ? "Aktiv" : "Inaktiv"}
+                </label>
+              </form>
+            </div>
+            <div class="modal-preview flex">
+              <div class="modal-title dark">Preview</div>
+              <div class="modal-card flex">
+                <div><img src={`/src/assets/${current.photo}`} alt={current.photo} class="modal-img" /></div>
+                <div class="modal-card-content flex">
+                  <div>
+                    <div class="modal-title gray">{current.firstName + " " + current.lastName}</div>
+                    <div class="gray bold">{current.employeeKey.toUpperCase()}</div>
+                  </div>
+                  <div class="tag">
+                    <span class={current.department.toLowerCase()}>{current.department}</span>
+                    <span class={current.active ? "aktiv" : "inaktiv"}>{current.active ? "Aktiv" : "Inaktiv"}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+  </div>  
+</main>
