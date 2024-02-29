@@ -30,20 +30,41 @@
 
   function handleSelectRow(_: MouseEvent, employee: Current) {
     document.documentElement.style.overflow = "hidden";
-    current = employee;
+
+    // make a copy of the employee data for the modal
+    current = {...employee};
     open = true;
   }
 
-  function handleOpenModal() {
+  // handle closing the modal without saving
+  function handleCloseModal() {
+    // find original employee and reset the current one to it
+    const original = employeesData.find((employee) => employee.employeeKey === current.employeeKey);
+    if (original) {
+      current = original;
+    }
     document.documentElement.style.overflow = "auto";
     open = false;
   }
 
+  // close modal on escape key press
   document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape') {
+    if (event.key === 'Escape') {
+      handleCloseModal();
+    }
+  });
+
+  function handleSubmitForm(event: Event) {
+    event.preventDefault();
+    // replace original with modified employee
+    employeesData = employeesData.map((employee) => {
+      if (employee.employeeKey === current.employeeKey) {
+        return current;
+      }
+      return employee;
+    });
     open = false;
   }
-})
 
 </script>
 
@@ -84,13 +105,13 @@
     </tfoot>
   </table>
   <div id="ModalContainer" class={open ? "visible" : "hide"}>
-      <button id="BgModal" class={open ? "visible" : "hide"} on:click={handleOpenModal}></button>
+      <button id="BgModal" class={open ? "visible" : "hide"} on:click={handleCloseModal}></button>
       <div id="Modal" class={open ? "go-up" : ""}>
-        <div class="modal-close-heading"><button on:click={handleOpenModal} class="modal-close"><img src={close} alt="close icon"/></button></div>
+        <div class="modal-close-heading"><button on:click={handleCloseModal} class="modal-close"><img src={close} alt="close icon"/></button></div>
         <div class="modal-content flex">
             <div class="modal-form flex">
               <div class="modal-title dark">Aktuelle Daten</div>
-              <form>
+              <form on:submit={(event) => handleSubmitForm(event)}>
                 <label>
                   Personalnummer
                   <input bind:value={current.employeeKey} name="personalnummer" type="text"/>
@@ -114,6 +135,9 @@
                 <label class="checkbox">
                   <input type="checkbox" name="status" value="aktiv" bind:checked={current.active}/> {current.active ? "Aktiv" : "Inaktiv"}
                 </label>
+                <div class="div-submit-btn flex">
+                  <button type="submit">Speichern</button>
+                </div>
               </form>
             </div>
             <div class="modal-preview flex">

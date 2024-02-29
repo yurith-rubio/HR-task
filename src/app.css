@@ -233,7 +233,19 @@ button.modal-close{
   border: none;
   cursor: pointer;
 }
-
+button[type=submit]{
+  padding: 4px 15px;
+  text-transform: uppercase;
+  font-weight: 600;
+  background-color: #444;
+  box-shadow: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.div-submit-btn{
+  justify-content: flex-end;
+}
 @keyframes go-up {
 
   0% {
