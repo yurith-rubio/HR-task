@@ -38,10 +38,16 @@
     document.documentElement.style.overflow = "auto";
     open = false;
   }
+
+  document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    open = false;
+  }
+})
+
 </script>
 
 <main>
-  <!-- <Modal isOpen={open} /> -->
   <table id="TableContainer">
     <thead>
       <tr>
