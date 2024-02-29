@@ -1,5 +1,4 @@
 <script lang="ts">
-  import viteLogo from '/vite.svg'
   import employees from './lib/employees.json'
   import edit from './assets/edit.svg'
   import close from './assets/x.svg'
@@ -27,18 +26,18 @@
     active: false,
     created: "",
     comment: ""
-  }
+  };
 
-  function handleSelectRow(event: MouseEvent, employee: Current) {
+  function handleSelectRow(_: MouseEvent, employee: Current) {
     document.documentElement.style.overflow = "hidden";
     current = employee;
     open = true;
   }
+
   function handleOpenModal() {
     document.documentElement.style.overflow = "auto";
     open = false;
   }
-
 </script>
 
 <main>
@@ -63,7 +62,7 @@
           <td>{employee.firstName} {employee.lastName} <span class="edit"><img class="edit-icon" src={edit} alt="edit icon"/></span></td>
           <td class="tag"><span class="{employee.department.toLowerCase()}">{employee.department}</span></td>
           <td class="tag"><span class={employee.active ? "aktiv" : "inaktiv"}>{employee.active ? "Aktiv" : "Inaktiv"}</span></td>
-          <td>{employee.created}</td>
+          <td>{new Date(employee.created).toLocaleDateString("de")}</td>
           {#if employee.comment}
             <td class="comment">{employee.comment}</td>
           {:else}
@@ -88,26 +87,26 @@
               <form>
                 <label>
                   Personalnummer
-                  <input name="personalnummer" type="text"/>
+                  <input bind:value={current.employeeKey} name="personalnummer" type="text"/>
                 </label>
                 <label>
                   Vorname
-                  <input name="vorname" type="text"/>
+                  <input bind:value={current.firstName} name="vorname" type="text"/>
                 </label>
                 <label>
                   Nachname
-                  <input name="nachname" type="text"/>
+                  <input bind:value={current.lastName} name="nachname" type="text"/>
                 </label>
                 <label>
                   Abteilung
-                  <select name="abteilung">
-                    <option value="IT">IT</option>
+                  <select bind:value={current.department} name="abteilung">
+                    <option value="Other">Other</option>
                     <option value="HR">HR</option>
-                    <option value="Finance">Finance</option>
-                    <option value="Marketing">Marketing</option>
+                    <option value="Management">Management</option>
+                    <option value="IT">IT</option>
                 </label>
                 <label class="checkbox">
-                  <input type="checkbox" name="status" value="aktiv" checked={current.active ? true : false}/> {current.active ? "Aktiv" : "Inaktiv"}
+                  <input type="checkbox" name="status" value="aktiv" bind:checked={current.active}/> {current.active ? "Aktiv" : "Inaktiv"}
                 </label>
               </form>
             </div>
