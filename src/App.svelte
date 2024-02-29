@@ -1,7 +1,7 @@
 <script lang="ts">
   import employees from './lib/employees.json'
-  import edit from './assets/edit.svg'
-  import close from './assets/x.svg'
+  import edit from '/public/edit.svg'
+  import close from '/public/x.svg'
 
   let employeesData = employees;
   let open = false;
@@ -28,7 +28,7 @@
     comment: ""
   };
 
-  function handleSelectRow(_: MouseEvent, employee: Current) {
+  function handleOpenModal(_: MouseEvent, employee: Current) {
     document.documentElement.style.overflow = "hidden";
 
     // make a copy of the employee data for the modal
@@ -83,9 +83,9 @@
     </thead>
     <tbody>
       {#each employeesData as employee}
-        <tr class="employee-row" on:click={(event) => handleSelectRow(event, employee)}>
+        <tr class="employee-row" on:click={(event) => handleOpenModal(event, employee)}>
           <td class="key">{employee.employeeKey.toUpperCase()}</td>
-          <td><img class="avatar-img" src={`/src/assets/${employee.photo}`} alt={`${employee.firstName} ${employee.lastName} photo`} width="100" height="100" /></td>
+          <td><img class="avatar-img" src={`${employee.photo}`} alt={`${employee.firstName} ${employee.lastName} photo`} width="100" height="100" /></td>
           <td>{employee.firstName} {employee.lastName} <span class="edit"><img class="edit-icon" src={edit} alt="edit icon"/></span></td>
           <td class="tag"><span class="{employee.department.toLowerCase()}">{employee.department}</span></td>
           <td class="tag"><span class={employee.active ? "aktiv" : "inaktiv"}>{employee.active ? "Aktiv" : "Inaktiv"}</span></td>
@@ -112,9 +112,10 @@
             <div class="modal-form flex">
               <div class="modal-title dark">Aktuelle Daten</div>
               <form on:submit={(event) => handleSubmitForm(event)}>
-                <label>
+                <label class="personalnummer">
                   Personalnummer
-                  <input bind:value={current.employeeKey} name="personalnummer" type="text"/>
+                  <!-- do not allow to modify the employee key -->
+                  <input readonly value={current.employeeKey} name="personalnummer" type="text"/>
                 </label>
                 <label>
                   Vorname
@@ -143,7 +144,7 @@
             <div class="modal-preview flex">
               <div class="modal-title dark">Preview</div>
               <div class="modal-card flex">
-                <div><img src={`/src/assets/${current.photo}`} alt={current.photo} class="modal-img" /></div>
+                <div><img src={`${current.photo}`} alt={current.photo} class="modal-img" /></div>
                 <div class="modal-card-content flex">
                   <div>
                     <div class="modal-title gray">{current.firstName + " " + current.lastName}</div>

@@ -228,6 +228,9 @@ label.checkbox{
   align-items: baseline;
   flex-direction: row;
 }
+label.personalnummer input{
+  background-color: #f4f4f4;
+}
 button.modal-close{
   background-color: white;
   border: none;
