@@ -1,3 +1,4 @@
-# HR-Task-UI-DEV
+# Personal Dashborad
 
-UI development for doinstruct
+This Personal Dashboard is an application developed with Svelte, it was developed in one day for an job application task at doinstruct.
+
