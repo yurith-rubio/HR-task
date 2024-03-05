@@ -5,7 +5,7 @@ This Personal Dashboard is an application developed with Svelte, it was develope
 ### Preview link
 You can see and test the application on https://personal-dashboard-svelte.netlify.app/
 
-## Tools
+### Tools
 - Svelte
 - Typescript
 - Visual Studio Code
